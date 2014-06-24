@@ -26,10 +26,12 @@ jQuery(document).ready(function($) {
 				console.log(post);
 				var image = post['images']['low_resolution'];
 				var user = post['user'];
+				var caption = post['caption'];
 
-				var out = '<div class="image col-xs-6 col-md-4 col-lg-3">'
-							+'<a href="'+post.link+'"><img src ="'+image.url+'" /></a><br/>'
-							+'<em>Username: '+user.username+'</div>'
+				var out = '<div class="image col-xs-6 col-md-4 col-lg-3">';
+				out += '<a href="'+post.link+'"><img src ="'+image.url+'" /></a><br/>';
+				// if (caption) out += '<span>'+caption.text+'</span><br/>';
+				out += '<em>Username: '+user.username+'</em><div class="clearfix></div></div>';
 
 				jQuery("#gallery").append(out);
 			});
