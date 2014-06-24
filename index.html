@@ -28,13 +28,19 @@
 
 	<div class="container">
 		<div class="row">
-			<div class="col-md-6">
-				<div class="input-group">
-					<input type="text" name="tag-text" class="form-control">
-					<span class="input-group-btn">
-						<button class="btn btn-default" type="button" name="tag-btn">Go!</button>
-					</span>
+			<div class="col-md-12">
+				<form action="javascript:updateGallery()">
+				<div class="form-group">
+					
+					<div class="input-group">
+						<input type="text" id="tag-text" class="form-control">
+						<span class="input-group-btn">
+							<button class="btn btn-default" type="button" id="tag-btn">Go!</button>
+						</span>
+					</div>
+					<span class="help-block">Input Instagram tag</label>
 				</div>
+			</form>
 			</div>
 		</div>
 
@@ -44,6 +50,7 @@
 		</div>
 	
 		<footer>
+			<hr />
 			<p>This page is made with the Instagram API</p>
 		</footer>
 

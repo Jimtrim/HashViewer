@@ -2,3 +2,7 @@
 	display: block;
 	clear:both;
 }
+
+.container hr {
+	margin-bottom: 2px;
+}
