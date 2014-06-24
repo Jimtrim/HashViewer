@@ -11,18 +11,21 @@ var TagViewer = {
 		var user = post.user;
 		var caption = post.caption;
 
-		var out = '<div class="image col-xs-6 col-md-4 col-lg-3">';
-		out += '<a href="'+post.link+'"><img src ="'+image.low_resolution.url+'" /></a><br/>';
-		out += '<em>Username: '+user.username+'</em><div class="clearfix></div></div>';
+		var out = '<div class="col-xs-6 col-md-4"><div class="gallery-image">';
+			out +=		'<a href="'+post.link+'"><img src ="'+image.low_resolution.url+'" /></a><br/>';
+			out +=		'<em>Username: '+user.username+'</em><div class="clearfix></div>'
+			out += '</div></div>';
 		
 		return out;
 	}, 
 
 	displayError: function(message) {
+		jQuery('#error-container').html('<span>'+message+'</span>').removeClass('hidden');
 		console.log(message);
 	},
 
 	updateGallery: function(event) {
+		jQuery('#error-container').addClass('hidden');
 		var tag = jQuery("input[id='tag-text']").val();
 		console.log(tag);
 		if (TagViewer.last_tag != tag) {
@@ -42,21 +45,22 @@ var TagViewer = {
 			if (res.meta.code >= 400) { // if requests responds with HTTP error codes
 				TagViewer.displayError("ERROR: "+res.meta.error_message);
 			} else {
-				TagViewer.next_url = res.pagination.next_url;
-				jQuery.each(res.data, function(i, post) {
+					jQuery.each(res.data, function(i, post) {
 					jQuery("#gallery").append(TagViewer.createGalleryBlock(post));
 				});
-				if (TagViewer.next_url) {
-					console.log(TagViewer.next_url);
+
+				if (res.pagination.next_url) {
 					jQuery("#more-btn").show();
+					TagViewer.next_url = res.pagination.next_url;
 				} else {
 					jQuery("#more-btn").hide();
 				}
 			}
 
 		})
-		.fail(function() {
+		.fail(function(err) {
 			console.log("error");
+			TagViewer.displayError("ERROR:"+err)
 		})
 		.always(function() {
 			console.log("complete");
