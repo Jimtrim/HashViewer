@@ -3,17 +3,28 @@
 
 var TagViewer = {
 	CLIENT_ID: 'd81afea83c3f40b5a5485418e2a53aa7',
-	next_url: '',
+	next_url: undefined,
 	last_tag: '',
+	no_of_pictures: 0,
+
+	reset: function() {
+		TagViewer.no_of_pictures = 0;
+		TagViewer.next_url = undefined;
+		jQuery("#gallery").html('');
+	},
 
 	createGalleryBlock: function(post) {
 		var image = post.images;
 		var user = post.user;
 		var caption = post.caption;
 
-		var out = '<div class="col-xs-6 col-md-4 col-lg-4"><div class="gallery-image text-center">';
-			out +=		'<a href="'+post.link+'"><img src ="'+image.low_resolution.url+'" /></a><br/>';
-			out +=		'<em>Username: '+user.username+'</em><div class="clearfix></div>'
+		var out = '<div class="col-xs-6 col-md-4 col-lg-4"> <div class="gallery-image text-center">';
+			out += '<div class="clearfix></div>'
+			out +=		'<a href="'+post.link+'"><img class="col-sm-12" src ="'+image.low_resolution.url+'" /></a><br/>';
+			out +=		'<em>Username: '+user.username+'</em>';
+			if (caption) {
+				out +=	'<p>'+caption.text+'</p>';
+			}
 			out += '</div></div>';
 		
 		return out;
@@ -27,11 +38,9 @@ var TagViewer = {
 	updateGallery: function(event) {
 		jQuery('#error-container').addClass('hidden');
 		var tag = jQuery("input[id='tag-text']").val();
-		console.log(tag);
 		if (TagViewer.last_tag != tag) {
+			TagViewer.reset();
 			TagViewer.last_tag = tag;
-			TagViewer.next_url = undefined;
-			jQuery("#gallery").html('');
 		}
 
 		url = TagViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+TagViewer.CLIENT_ID;
@@ -45,26 +54,27 @@ var TagViewer = {
 			if (res.meta.code >= 400) { // if requests responds with HTTP error codes
 				TagViewer.displayError("ERROR: "+res.meta.error_message);
 			} else {
-					jQuery.each(res.data, function(i, post) {
+				var new_i;
+				jQuery.each(res.data, function(i, post) {
+					if (TagViewer.no_of_pictures %2==0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
+					if (TagViewer.no_of_pictures %3==0) jQuery("#gallery").append('<div class="clearfix visible-md visible-lg">');
 					jQuery("#gallery").append(TagViewer.createGalleryBlock(post));
+					TagViewer.no_of_pictures += 1;
 				});
 
 				if (res.pagination.next_url) {
-					jQuery("#more-btn").show();
+					jQuery("#more-btn").removeClass('hidden');
 					TagViewer.next_url = res.pagination.next_url;
 				} else {
-					jQuery("#more-btn").hide();
+					jQuery("#more-btn").addClass('hidden');
 				}
 			}
 
 		})
 		.fail(function(err) {
 			console.log("error");
-			TagViewer.displayError("ERROR:"+err)
+			TagViewer.displayError("ERROR:"+err);
 		})
-		.always(function() {
-			console.log("complete");
-		});
 		
 		return this;
 	}
