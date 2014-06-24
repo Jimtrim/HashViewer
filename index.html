@@ -29,7 +29,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<form action="javascript:updateGallery()">
+				<form action="javascript:TagViewer.updateGallery()">
 				<div class="form-group">
 					
 					<div class="input-group">
@@ -38,16 +38,23 @@
 							<button class="btn btn-default" type="button" id="tag-btn">Go!</button>
 						</span>
 					</div>
-					<span class="help-block">Input Instagram tag</label>
+
+					<span class="help-block">Input Instagram tag</span>
 				</div>
 			</form>
 			</div>
 		</div>
 
 		<div class="row">
+			<div id="error-container" class="alert alert-danger">			
+			</div>	
 			<div id="gallery">
 			</div>
+			<div class="col-xs-12 pagination-centered">
+				<button onclick="TagViewer.updateGallery()" class="btn btn-default" type="button" id="more-btn">Load more</button>
+			</div>
 		</div>
+
 	
 		<footer>
 			<hr />

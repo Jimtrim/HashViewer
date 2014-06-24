@@ -6,3 +6,7 @@
 .container hr {
 	margin-bottom: 2px;
 }
+
+#error-container {
+	visibility: hidden;
+}
