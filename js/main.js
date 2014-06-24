@@ -11,7 +11,7 @@ var TagViewer = {
 		var user = post.user;
 		var caption = post.caption;
 
-		var out = '<div class="col-xs-6 col-md-4"><div class="gallery-image">';
+		var out = '<div class="col-xs-6 col-md-4 col-lg-4"><div class="gallery-image text-center">';
 			out +=		'<a href="'+post.link+'"><img src ="'+image.low_resolution.url+'" /></a><br/>';
 			out +=		'<em>Username: '+user.username+'</em><div class="clearfix></div>'
 			out += '</div></div>';
