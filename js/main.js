@@ -14,13 +14,13 @@ var TagViewer = {
 	},
 
 	createGalleryBlock: function(post) {
-		var image = post.images;
+		var image = post.images.low_resolution;
 		var user = post.user;
 		var caption = post.caption;
 
 		var out = '<div class="col-xs-6 col-md-4 col-lg-4"> <div class="gallery-image text-center">';
-			out += '<div class="clearfix></div>'
-			out +=		'<a href="'+post.link+'"><img class="col-sm-12" src ="'+image.low_resolution.url+'" /></a><br/>';
+			//out += '<div class="clearfix"></div>'
+			out +=		'<a href="'+post.link+'"><img class="col-sm-12" src ="'+image.url+'" /></a><br/>';
 			out +=		'<em>Username: '+user.username+'</em>';
 			if (caption) {
 				out +=	'<p>'+caption.text+'</p>';
