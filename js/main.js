@@ -11,6 +11,7 @@ var TagViewer = {
 		TagViewer.no_of_pictures = 0;
 		TagViewer.next_url = undefined;
 		jQuery("#gallery").html('');
+		jQuery("#more-btn").addClass('hidden');
 	},
 
 	createGalleryBlock: function(post) {
