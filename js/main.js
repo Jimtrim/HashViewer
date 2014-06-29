@@ -1,17 +1,28 @@
 // https://api.instagram.com/v1/tags/javielskerukm/media/recent?client_id=d81afea83c3f40b5a5485418e2a53aa7
 
 
-var TagViewer = {
+var HashViewer = {
 	CLIENT_ID: 'd81afea83c3f40b5a5485418e2a53aa7',
 	next_url: undefined,
 	last_tag: '',
 	no_of_pictures: 0,
 
 	reset: function() {
-		TagViewer.no_of_pictures = 0;
-		TagViewer.next_url = undefined;
+		HashViewer.no_of_pictures = 0;
+		HashViewer.next_url = undefined;
 		jQuery("#gallery").html('');
 		jQuery("#more-btn").addClass('hidden');
+	},
+
+	splitHashtags: function(text) {
+		var result = "";
+		for(var i = 1; i < text.length; i++) {
+			if(text[i]=='#' && text[i-1]!=' ') {
+				result += ' ';
+			}
+			result += text[i];
+		}
+		return result;
 	},
 
 	createGalleryBlock: function(post) {
@@ -24,7 +35,7 @@ var TagViewer = {
 			out +=		'<a href="'+post.link+'"><img width="'+image.width+'px" class="gallery-image col-sm-12" src ="'+image.url+'" /></a><br/>';
 			out +=		'<em>Username: <a href="http://instagram.com/'+user.username+'">'+user.username+'</a></em>';
 			if (caption) {
-				out +=	'<p>'+caption.text+'</p>';
+				out +=	'<p>'+this.splitHashtags(caption.text)+'</p>';
 			}
 			out +=  '</div>' //witdh-fix END
 			out += '</div>';
@@ -40,12 +51,12 @@ var TagViewer = {
 	updateGallery: function(event) {
 		jQuery('#error-container').addClass('hidden');
 		var tag = jQuery("input[id='tag-text']").val();
-		if (TagViewer.last_tag != tag) {
-			TagViewer.reset();
-			TagViewer.last_tag = tag;
+		if (HashViewer.last_tag != tag) {
+			HashViewer.reset();
+			HashViewer.last_tag = tag;
 		}
 
-		url = TagViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+TagViewer.CLIENT_ID;
+		url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
 		
 		jQuery.ajax({
 			url: url,
@@ -54,20 +65,20 @@ var TagViewer = {
 		})
 		.done(function(res) {
 			if (res.meta.code >= 400) { // if requests responds with HTTP error codes
-				TagViewer.displayError("ERROR: "+res.meta.error_message);
+				HashViewer.displayError("ERROR: "+res.meta.error_message);
 			} else {
 				var new_i;
 				jQuery.each(res.data, function(i, post) {
-					if (TagViewer.no_of_pictures %2==0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
-					if (TagViewer.no_of_pictures %3==0) jQuery("#gallery").append('<div class="clearfix visible-md">');
-					if (TagViewer.no_of_pictures %4==0) jQuery("#gallery").append('<div class="clearfix visible-lg">');
-					jQuery("#gallery").append(TagViewer.createGalleryBlock(post));
-					TagViewer.no_of_pictures += 1;
+					if (HashViewer.no_of_pictures %2==0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
+					if (HashViewer.no_of_pictures %3==0) jQuery("#gallery").append('<div class="clearfix visible-md">');
+					if (HashViewer.no_of_pictures %4==0) jQuery("#gallery").append('<div class="clearfix visible-lg">');
+					jQuery("#gallery").append(HashViewer.createGalleryBlock(post));
+					HashViewer.no_of_pictures += 1;
 				});
 
 				if (res.pagination.next_url) {
 					jQuery("#more-btn").removeClass('hidden');
-					TagViewer.next_url = res.pagination.next_url;
+					HashViewer.next_url = res.pagination.next_url;
 				} else {
 					jQuery("#more-btn").addClass('hidden');
 				}
@@ -76,7 +87,7 @@ var TagViewer = {
 		})
 		.fail(function(err) {
 			console.log("error");
-			TagViewer.displayError("ERROR:"+err);
+			HashViewer.displayError("ERROR:"+err);
 		})
 		
 		return this;
@@ -84,7 +95,7 @@ var TagViewer = {
 };
 
 jQuery(document).ready(function($) {
-	$("button[id='tag-btn']").bind('click', TagViewer.updateGallery); 
+	$("button[id='tag-btn']").bind('click', HashViewer.updateGallery); 
 
 	$("input[id='tag-text']").keypress(function (e) {
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
