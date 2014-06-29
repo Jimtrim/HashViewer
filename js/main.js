@@ -19,7 +19,7 @@ var TagViewer = {
 		var user = post.user;
 		var caption = post.caption;
 
-		var out = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">'
+		var out = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">'
 			out += '<div width="'+image.width+'px" class="gallery-block text-center">';
 			out +=		'<a href="'+post.link+'"><img width="'+image.width+'px" class="gallery-image col-sm-12" src ="'+image.url+'" /></a><br/>';
 			out +=		'<em>Username: <a href="http://instagram.com/'+user.username+'">'+user.username+'</a></em>';
@@ -59,7 +59,8 @@ var TagViewer = {
 				var new_i;
 				jQuery.each(res.data, function(i, post) {
 					if (TagViewer.no_of_pictures %2==0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
-					if (TagViewer.no_of_pictures %3==0) jQuery("#gallery").append('<div class="clearfix visible-md visible-lg">');
+					if (TagViewer.no_of_pictures %3==0) jQuery("#gallery").append('<div class="clearfix visible-md">');
+					if (TagViewer.no_of_pictures %4==0) jQuery("#gallery").append('<div class="clearfix visible-lg">');
 					jQuery("#gallery").append(TagViewer.createGalleryBlock(post));
 					TagViewer.no_of_pictures += 1;
 				});
