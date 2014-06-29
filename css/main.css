@@ -16,15 +16,7 @@
 	display:none;
 }
 
-.gallery-block {	
-	/*
-	display:inline-block;
-	
-	padding: 10px;
-
-	background-color: #FFF;
-	border-radius: 10px;
-	/**/
+.gallery-block {
 	margin: 5px 0 10px 0;
 	border: 1px solid #AAA;
 	border-radius: 10px;
