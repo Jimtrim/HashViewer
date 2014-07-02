@@ -33,9 +33,10 @@ HashViewer.reset = function() {
 	jQuery("#more-btn").addClass('hidden');
 };
 
+
 HashViewer.getInputField = function () {
 	return jQuery("input[id='tag-text']");
-}
+};
 
 
 HashViewer.splitHashtags = function(text) {
