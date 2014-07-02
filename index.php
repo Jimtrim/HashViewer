@@ -85,7 +85,7 @@
 		        }
 
 		        //Turn off analytics if 'localhost' is the host
-		        if (window.location.host == 'localhost') {
+		        if (window.location.host == 'localhost' || window.location.host == 'dev.hashviewer.net') {
 		            useAnalytics = false;
 		        }
 		    } catch(e) {
