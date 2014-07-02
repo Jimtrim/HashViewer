@@ -1,3 +1,5 @@
 {
-	"info":"For future use"
+    "require": {
+        "nategood/httpful": "*"
+    }
 }
