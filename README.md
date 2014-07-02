@@ -1,4 +1,4 @@
 HashViewer
 =========
 
-View images with a given tag on Instagram, with no login required
+View images on Instagram based on hashtags

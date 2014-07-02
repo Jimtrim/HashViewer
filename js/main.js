@@ -14,6 +14,10 @@ var HashViewer = {
 		jQuery("#more-btn").addClass('hidden');
 	},
 
+	removeHash: function () {
+		
+	}
+
 	splitHashtags: function(text) {
 		var result = text[0];
 		for(var i = 1; i < text.length; i++) {
@@ -37,7 +41,7 @@ var HashViewer = {
 			if (caption) {
 				out +=	'<p>'+this.splitHashtags(caption.text)+'</p>';
 			}
-			out +=  '</div>' //witdh-fix END
+			out +=  '</div>' //width-fix END
 			out += '</div>';
 		
 		return out;
@@ -69,11 +73,12 @@ var HashViewer = {
 			} else {
 				var new_i;
 				jQuery.each(res.data, function(i, post) {
-					if (HashViewer.no_of_pictures %2==0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
+					if (HashViewer.no_of_pictures %4==0) jQuery("#gallery").append('<div class="clearfix visible-lg visible-sm">');
+					else if(HashViewer.no_of_pictures %2==0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
 					if (HashViewer.no_of_pictures %3==0) jQuery("#gallery").append('<div class="clearfix visible-md">');
-					if (HashViewer.no_of_pictures %4==0) jQuery("#gallery").append('<div class="clearfix visible-lg">');
 					jQuery("#gallery").append(HashViewer.createGalleryBlock(post));
 					HashViewer.no_of_pictures += 1;
+					/**/
 				});
 
 				if (res.pagination.next_url) {

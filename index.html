@@ -22,7 +22,8 @@
 
 	<div class="jumbotron">
 		<div class="container">
-			<a href="javascript:HashViewer.reset()"><h1>HashViewer for Instagram</h1></p></a>
+			<a href="javascript:HashViewer.reset()"><h1 class="page-header">HashViewer</h1></a>
+			</em>for Instagram<em>
 		</div>
 	</div>
 
