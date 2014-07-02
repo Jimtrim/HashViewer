@@ -72,8 +72,7 @@ HashViewer.updateGallery = function(event, in_tag) {
 	tag = Util.removeLeadingHash(tag);
 	if (tag === "") return;
 	if (HashViewer.last_tag != tag) {
-		if (useAnalytics) {
-			var a = null;
+		if (useAnalytics && _gaq) {
 			_gaq.push(['_trackEvent', 'HashViewer', 'UpdateGallery', tag]);
 		}
 		HashViewer.reset();
