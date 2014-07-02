@@ -19,7 +19,6 @@ var Util = {
 }
 
 var HashViewer = {
-	CLIENT_ID: 'd81afea83c3f40b5a5485418e2a53aa7', // TODO: get this on server-side
 	next_url: undefined,
 	last_tag: '',
 	no_of_pictures: 0,
@@ -82,12 +81,13 @@ var HashViewer = {
 		}
 		if ($("input[id='tag-text']").val() == "") $("input[id='tag-text']").val(tag);
 
-		url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
+		// url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
+		url = HashViewer.next_url || window.location.pathname + 'gallery.controller.php?hashtag='+tag
 
 		jQuery.ajax({
 			url: url,
 			type: 'get',
-			dataType: 'jsonp'
+			dataType: 'json'
 		})
 		.done(function(res) {
 			if (res.meta.code >= 400) { // if requests responds with HTTP error codes
