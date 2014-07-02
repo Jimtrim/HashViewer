@@ -17,6 +17,7 @@ Util.removeLeadingHash = function (str) {
 
 var HashViewer = HashViewer || {};
 HashViewer.next_url = undefined;
+HashViewer.next_max_tag_id = undefined;
 HashViewer.last_tag = '';
 HashViewer.no_of_pictures = 0;
 HashViewer.reset = function() {
@@ -78,7 +79,9 @@ HashViewer.updateGallery = function(event, in_tag) {
 	if ($("input[id='tag-text']").val() === "") $("input[id='tag-text']").val(tag);
 
 	// url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
-	url = HashViewer.next_url || window.location.pathname + 'gallery.controller.php?hashtag='+tag;
+	url = window.location.pathname + 'gallery.controller.php?hashtag='+tag;
+	if (HashViewer.next_max_tag_id) 
+		url += "&max_tag_id="+HashViewer.next_max_tag_id;
 
 	jQuery.ajax({
 		url: url,
@@ -94,14 +97,15 @@ HashViewer.updateGallery = function(event, in_tag) {
 				if (HashViewer.no_of_pictures % 4 === 0) jQuery("#gallery").append('<div class="clearfix visible-lg visible-sm">');
 				else if(HashViewer.no_of_pictures % 2 === 0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
 				if (HashViewer.no_of_pictures % 3 === 0) jQuery("#gallery").append('<div class="clearfix visible-md">');
+
 				jQuery("#gallery").append(HashViewer.createGalleryBlock(post));
 				HashViewer.no_of_pictures += 1;
 				/**/
 			});
 
-			if (res.pagination.next_url) {
+			if (res.pagination.next_max_tag_id) {
 				jQuery("#more-btn").removeClass('hidden');
-				HashViewer.next_url = res.pagination.next_url;
+				HashViewer.next_max_tag_id = res.pagination.next_max_tag_id;
 			} else {
 				jQuery("#more-btn").addClass('hidden');
 			}
