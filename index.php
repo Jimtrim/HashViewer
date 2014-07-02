@@ -30,19 +30,17 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<form action="javascript:HashViewer.updateGallery()">
 				<div class="form-group">
 					
 					<div class="input-group">
 						<input type="text" id="tag-text" class="form-control">
 						<span class="input-group-btn">
-							<button class="btn btn-default" type="button" id="tag-btn">Go!</button>
+							<button class="btn btn-default" type="button" id="tag-btn" onClick="HashViewer.updateWindowHash()">Go!</button>
 						</span>
 					</div>
 
 					<span class="help-block">Input Instagram tag</span>
 				</div>
-			</form>
 			</div>
 		</div>
 
