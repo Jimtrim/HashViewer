@@ -26,9 +26,15 @@ HashViewer.reset = function() {
 	HashViewer.next_max_tag_id = undefined;
 	HashViewer.last_tag = '';
 	HashViewer.no_of_pictures = 0;
+	HashViewer.getInputField().val("");
+	HashViewer.setWindowHash("")
 	jQuery("#gallery").html('');
 	jQuery("#more-btn").addClass('hidden');
 };
+
+HashViewer.getInputField = function () {
+	return jQuery("input[id='tag-text']");
+}
 
 HashViewer.splitHashtags = function(text) {
 	var result = text[0];
@@ -66,7 +72,7 @@ HashViewer.displayError = function(message) {
 };
 
 HashViewer.updateWindowHash = function() {
-	Util.setWindowHash( $("input[id='tag-text']").val() );
+	Util.setWindowHash( HashViewer.getInputField.val() );
 };
 
 HashViewer.updateGallery = function(event, in_tag) {
@@ -83,11 +89,11 @@ HashViewer.updateGallery = function(event, in_tag) {
 		HashViewer.last_tag = tag;
 	}
 
-	if ($("input[id='tag-text']").val() === "") 
-		$("input[id='tag-text']").val(tag); // Set search field to location hash when navigating directly to search
+	if (HashViewer.getInputField.val() === "") 
+		HashViewer.getInputField.val(tag); // Set search field to location hash when navigating directly to search
 
 	// url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
-	HashViewer.next_url = window.location.pathname + 'gallery.controller.php?hashtag='+tag;
+	HashViewer.next_url = window.location.pathname + 'gallery.controller.php?hashtag='+encodeURIComponent(tag);
 	if (HashViewer.next_max_tag_id) 
 		HashViewer.next_url += "&max_tag_id="+HashViewer.next_max_tag_id;
 
@@ -121,11 +127,11 @@ HashViewer.updateGallery = function(event, in_tag) {
 
 	})
 	.fail(function(err) {
-		console.log("fail");
+		console.log("fail: " + HashViewer.next_url);
 		HashViewer.displayError("FAILURE:"+err);
 	})
 	.error(function(XHR, status, err) {
-		console.log("error");
+		console.log("error: " + HashViewer.next_url);
 		HashViewer.displayError("ERROR:"+err);
 	});
 	
@@ -136,7 +142,7 @@ jQuery(document).ready(function($) {
 	// $("button[id='tag-btn']").bind('click', HashViewer.updateWindowHash()); 
 	var useAnalytics = useAnalytics || true;
 
-	$("input[id='tag-text']").keypress(function (e) { // enter-fix for search
+	HashViewer.getInputField.keypress(function (e) { // enter-fix for search
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
             $("button[id='tag-btn']").click();
             $(this).blur();	
