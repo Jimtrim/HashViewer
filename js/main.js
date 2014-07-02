@@ -1,6 +1,23 @@
 // https://api.instagram.com/v1/tags/javielskerukm/media/recent?client_id=d81afea83c3f40b5a5485418e2a53aa7
 
 
+var Util = {
+	getWindowHash: function() {
+		return window.location.hash;
+	},
+	setWindowHash: function(hash) {
+		if (typeof hash == "string") {
+			window.location.hash = Util.removeLeadingHash(hash);
+		}
+	},
+	removeLeadingHash: function (str) {
+		if (typeof str == "string" && str.charAt(0) == '#') {
+			return str.substring(1);
+		}
+		return str;
+	}
+}
+
 var HashViewer = {
 	CLIENT_ID: 'd81afea83c3f40b5a5485418e2a53aa7',
 	next_url: undefined,
@@ -12,13 +29,6 @@ var HashViewer = {
 		HashViewer.next_url = undefined;
 		jQuery("#gallery").html('');
 		jQuery("#more-btn").addClass('hidden');
-	},
-
-	removeHash: function (str) {
-		if (str.charAt(0) == '#') {
-			return str.substring(1);
-		}
-		return str;
 	},
 
 	splitHashtags: function(text) {
@@ -55,17 +65,24 @@ var HashViewer = {
 		console.log(message);
 	},
 
-	updateGallery: function(event) {
+	updateWindowHash: function() {
+		console.log("updating window hash");
+		 Util.setWindowHash( $("input[id='tag-text']").val() );
+	},
+
+	updateGallery: function(event, in_tag) {
 		jQuery('#error-container').addClass('hidden');
-		var tag = jQuery("input[id='tag-text']").val();
-		tag = HashViewer.removeHash(tag);
+		var tag = in_tag || Util.getWindowHash() || jQuery("input[id='tag-text']").val();
+		tag = Util.removeLeadingHash(tag);
+		if (tag == "") return;
 		if (HashViewer.last_tag != tag) {
 			HashViewer.reset();
 			HashViewer.last_tag = tag;
 		}
 
 		url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
-		
+		console.log(url)
+
 		jQuery.ajax({
 			url: url,
 			type: 'get',
@@ -95,6 +112,10 @@ var HashViewer = {
 
 		})
 		.fail(function(err) {
+			console.log("fail");
+			HashViewer.displayError("FAILURE:"+err);
+		})
+		.error(function(XHR, status, err) {
 			console.log("error");
 			HashViewer.displayError("ERROR:"+err);
 		})
@@ -104,9 +125,9 @@ var HashViewer = {
 };
 
 jQuery(document).ready(function($) {
-	$("button[id='tag-btn']").bind('click', HashViewer.updateGallery); 
+	// $("button[id='tag-btn']").bind('click', HashViewer.updateWindowHash()); 
 
-	$("input[id='tag-text']").keypress(function (e) {
+	$("input[id='tag-text']").keypress(function (e) { // enter-fix for search
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
             $("button[id='tag-btn']").click();
             $(this).blur();	
@@ -115,4 +136,11 @@ jQuery(document).ready(function($) {
             return true;
         }
     });
+
+	jQuery(window).bind('hashchange', function(event) {
+		var tag = window.location.hash.slice(1);
+		HashViewer.updateGallery(event, tag)
+	});
+	HashViewer.updateGallery();
+
 });
