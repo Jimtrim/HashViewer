@@ -16,7 +16,7 @@ var HashViewer = {
 
 	removeHash: function () {
 		
-	}
+	},
 
 	splitHashtags: function(text) {
 		var result = text[0];
