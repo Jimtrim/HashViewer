@@ -14,8 +14,11 @@ var HashViewer = {
 		jQuery("#more-btn").addClass('hidden');
 	},
 
-	removeHash: function () {
-		
+	removeHash: function (str) {
+		if (str.charAt(0) == '#') {
+			return str.substring(1);
+		}
+		return str;
 	},
 
 	splitHashtags: function(text) {
@@ -55,6 +58,7 @@ var HashViewer = {
 	updateGallery: function(event) {
 		jQuery('#error-container').addClass('hidden');
 		var tag = jQuery("input[id='tag-text']").val();
+		tag = HashViewer.removeHash(tag);
 		if (HashViewer.last_tag != tag) {
 			HashViewer.reset();
 			HashViewer.last_tag = tag;
