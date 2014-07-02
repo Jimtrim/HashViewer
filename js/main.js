@@ -38,6 +38,7 @@ HashViewer.splitHashtags = function(text) {
 	return result;
 };
 
+
 HashViewer.createGalleryBlock = function(post) {
 	var image = post.images.low_resolution;
 	var user = post.user;
@@ -71,11 +72,14 @@ HashViewer.updateGallery = function(event, in_tag) {
 	tag = Util.removeLeadingHash(tag);
 	if (tag === "") return;
 	if (HashViewer.last_tag != tag) {
-		if (useAnalytics)
+		if (useAnalytics) {
 			var a = null;
+			_gaq.push(['_trackEvent', 'HashViewer', 'UpdateGallery', tag]);
+		}
 		HashViewer.reset();
 		HashViewer.last_tag = tag;
 	}
+
 	if ($("input[id='tag-text']").val() === "") $("input[id='tag-text']").val(tag);
 
 	// url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
