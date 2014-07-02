@@ -19,7 +19,7 @@ var Util = {
 }
 
 var HashViewer = {
-	CLIENT_ID: 'd81afea83c3f40b5a5485418e2a53aa7',
+	CLIENT_ID: 'd81afea83c3f40b5a5485418e2a53aa7', // TODO: get this on server-side
 	next_url: undefined,
 	last_tag: '',
 	no_of_pictures: 0,
@@ -66,8 +66,7 @@ var HashViewer = {
 	},
 
 	updateWindowHash: function() {
-		console.log("updating window hash");
-		 Util.setWindowHash( $("input[id='tag-text']").val() );
+		Util.setWindowHash( $("input[id='tag-text']").val() );
 	},
 
 	updateGallery: function(event, in_tag) {
@@ -76,12 +75,14 @@ var HashViewer = {
 		tag = Util.removeLeadingHash(tag);
 		if (tag == "") return;
 		if (HashViewer.last_tag != tag) {
+			if (useAnalytics)
+				var a = null;
 			HashViewer.reset();
 			HashViewer.last_tag = tag;
 		}
+		if ($("input[id='tag-text']").val() == "") $("input[id='tag-text']").val(tag);
 
 		url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
-		console.log(url)
 
 		jQuery.ajax({
 			url: url,
@@ -126,6 +127,7 @@ var HashViewer = {
 
 jQuery(document).ready(function($) {
 	// $("button[id='tag-btn']").bind('click', HashViewer.updateWindowHash()); 
+	var useAnalytics = useAnalytics || true;
 
 	$("input[id='tag-text']").keypress(function (e) { // enter-fix for search
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {

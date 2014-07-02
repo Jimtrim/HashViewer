@@ -69,14 +69,39 @@
 
 		<!-- Google Analytics -->
 		<script>
-		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		    var useAnalytics = true;
 
-		  ga('create', 'UA-52465698-1', 'auto');
-		  ga('send', 'pageview');
+		    try {
+		        //Turn off analytics if 'analytics=off' is included as a request parameter.
+		        var parameters = window.location.search.split('&');
+		        if (parameters[0]) {
+		            parameters[0] = parameters[0].replace('?', '');
+		        }
+		        for (var i = 0; i < parameters.length; i++) {
+		            var values = parameters[i].split('=');
+		            if (values[0] == 'analytics' && values[1] == 'off') {
+		                useAnalytics = false;
+		            }
+		        }
 
+		        //Turn off analytics if 'localhost' is the host
+		        if (window.location.host == 'localhost') {
+		            useAnalytics = false;
+		        }
+		    } catch(e) {
+		        //Just in case something goes wrong...
+		        useAnalytics = true;
+		    }
+
+		    if (useAnalytics) {
+				(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+				m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+				})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+				ga('create', 'UA-52465698-1', 'auto');
+				ga('send', 'pageview');
+			}
 		</script>
 		<!-- -->
 	</div>
