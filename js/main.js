@@ -20,9 +20,12 @@ HashViewer.next_url = undefined;
 HashViewer.next_max_tag_id = undefined;
 HashViewer.last_tag = '';
 HashViewer.no_of_pictures = 0;
+
 HashViewer.reset = function() {
-	HashViewer.no_of_pictures = 0;
 	HashViewer.next_url = undefined;
+	HashViewer.next_max_tag_id = undefined;
+	HashViewer.last_tag = '';
+	HashViewer.no_of_pictures = 0;
 	jQuery("#gallery").html('');
 	jQuery("#more-btn").addClass('hidden');
 };
@@ -67,9 +70,10 @@ HashViewer.updateWindowHash = function() {
 };
 
 HashViewer.updateGallery = function(event, in_tag) {
-	jQuery('#error-container').addClass('hidden');
+	jQuery('#error-container').addClass('hidden'); // Hide old errors
 	var tag = in_tag || Util.getWindowHash() || jQuery("input[id='tag-text']").val();
 	tag = Util.removeLeadingHash(tag);
+
 	if (tag === "") return;
 	if (HashViewer.last_tag != tag) {
 		if (useAnalytics && _gaq) {
@@ -79,15 +83,16 @@ HashViewer.updateGallery = function(event, in_tag) {
 		HashViewer.last_tag = tag;
 	}
 
-	if ($("input[id='tag-text']").val() === "") $("input[id='tag-text']").val(tag);
+	if ($("input[id='tag-text']").val() === "") 
+		$("input[id='tag-text']").val(tag); // Set search field to location hash when navigating directly to search
 
 	// url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
-	url = window.location.pathname + 'gallery.controller.php?hashtag='+tag;
+	HashViewer.next_url = window.location.pathname + 'gallery.controller.php?hashtag='+tag;
 	if (HashViewer.next_max_tag_id) 
-		url += "&max_tag_id="+HashViewer.next_max_tag_id;
+		HashViewer.next_url += "&max_tag_id="+HashViewer.next_max_tag_id;
 
 	jQuery.ajax({
-		url: url,
+		url: HashViewer.next_url,
 		type: 'get',
 		dataType: 'json'
 	})
