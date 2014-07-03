@@ -74,15 +74,14 @@ HashViewer.displayError = function(message) {
 };
 
 HashViewer.updateWindowHash = function() {
-	if ( Util.getWindowHash() !== "" && HashViewer.last_tag == Util.removeLeadingHash(Util.getWindowHash()) ) {
+	Util.setWindowHash( HashViewer.getInputField().val() );
+	if ( HashViewer.last_tag == Util.removeLeadingHash( Util.getWindowHash() ) ) {
 		HashViewer.updateGallery();
-	} else {
-		Util.setWindowHash( HashViewer.getInputField().val() );
 	}
 };
 
 HashViewer.updateGallery = function(event, in_tag) {
-	console.log("updateGallery called")
+	console.log("updateGallery called");
 	jQuery('#error-container').addClass('hidden'); // Hide old errors
 	var tag = in_tag || Util.getWindowHash() || jQuery("input[id='tag-text']").val();
 	tag = Util.removeLeadingHash(tag);
@@ -114,7 +113,6 @@ HashViewer.updateGallery = function(event, in_tag) {
 		if (res.meta.code >= 400) { // if requests responds with HTTP error codes
 			HashViewer.displayError("ERROR: "+res.meta.error_message);
 		} else {
-			var new_i;
 			jQuery.each(res.data, function(i, post) {
 				if (HashViewer.no_of_pictures % 4 === 0) jQuery("#gallery").append('<div class="clearfix visible-lg visible-sm">');
 				else if(HashViewer.no_of_pictures % 2 === 0) jQuery("#gallery").append('<div class="clearfix visible-sm">');
@@ -122,7 +120,6 @@ HashViewer.updateGallery = function(event, in_tag) {
 
 				jQuery("#gallery").append(HashViewer.createGalleryBlock(post));
 				HashViewer.no_of_pictures += 1;
-				/**/
 			});
 
 			if (res.pagination.next_max_tag_id) {
