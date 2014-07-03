@@ -22,13 +22,12 @@ HashViewer.last_tag = '';
 HashViewer.no_of_pictures = 0;
 
 HashViewer.reset = function() {
+	console.log("reset called");
 	HashViewer.next_url = undefined;
 	HashViewer.next_max_tag_id = undefined;
 	HashViewer.last_tag = '';
 	HashViewer.no_of_pictures = 0;
 	HashViewer.getInputField().val("");
-	HashViewer.setWindowHash("")
-
 	jQuery("#gallery").html('');
 	jQuery("#more-btn").addClass('hidden');
 };
@@ -58,8 +57,8 @@ HashViewer.createGalleryBlock = function(post) {
 
 	var out = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">';
 		out += '<div width="'+image.width+'px" class="gallery-block text-center">';
-		out +=		'<a href="'+post.link+'"><img width="'+image.width+'px" class="gallery-image col-sm-12" src ="'+image.url+'" /></a><br/>';
-		out +=		'<em>Username: <a href="http://instagram.com/'+user.username+'">'+user.username+'</a></em>';
+		out +=		'<a href="'+post.link+'"><img width="'+image.width+'px" class="gallery-image col-sm-12" src ="'+image.url+'" /></a>';
+		out +=		'<em>User: <a href="http://instagram.com/'+user.username+'">'+user.username+'</a></em>';
 		if (caption) {
 			out +=	'<p>'+this.splitHashtags(caption.text)+'</p>';
 		}
@@ -75,14 +74,15 @@ HashViewer.displayError = function(message) {
 };
 
 HashViewer.updateWindowHash = function() {
-	console.log("CURRENT HASH: \"" + Util.getWindowHash()+"\"");
-	if (Util.getWindowHash() !== "" && Util.removeLeadingHash(Util.getWindowHash()) == Util.removeLeadingHash(HashViewer.last_tag))
+	if ( Util.getWindowHash() !== "" && HashViewer.last_tag == Util.removeLeadingHash(Util.getWindowHash()) ) {
 		HashViewer.updateGallery();
-	else
+	} else {
 		Util.setWindowHash( HashViewer.getInputField().val() );
+	}
 };
 
 HashViewer.updateGallery = function(event, in_tag) {
+	console.log("updateGallery called")
 	jQuery('#error-container').addClass('hidden'); // Hide old errors
 	var tag = in_tag || Util.getWindowHash() || jQuery("input[id='tag-text']").val();
 	tag = Util.removeLeadingHash(tag);
