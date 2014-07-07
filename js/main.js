@@ -27,13 +27,12 @@ HashViewer.reset = function() {
 	HashViewer.next_max_tag_id = undefined;
 	HashViewer.last_tag = '';
 	HashViewer.no_of_pictures = 0;
-	HashViewer.getInputField().val("");
 	jQuery("#gallery").html('');
 	jQuery("#more-btn").addClass('hidden');
 };
 
 
-HashViewer.getInputField = function () {
+HashViewer.getInputValue = function () {
 	return jQuery("input[id='tag-text']");
 };
 
@@ -74,7 +73,7 @@ HashViewer.displayError = function(message) {
 };
 
 HashViewer.updateWindowHash = function() {
-	Util.setWindowHash( HashViewer.getInputField().val() );
+	Util.setWindowHash( HashViewer.getInputValue().val() );
 	if ( HashViewer.last_tag == Util.removeLeadingHash( Util.getWindowHash() ) ) {
 		HashViewer.updateGallery();
 	}
@@ -96,8 +95,8 @@ HashViewer.updateGallery = function(event, in_tag) {
 	}
 
 
-	if (HashViewer.getInputField().val() === "") 
-		HashViewer.getInputField().val(tag); // Set search field to location hash when navigating directly to search
+	if (HashViewer.getInputValue().val() === "") 
+		HashViewer.getInputValue().val(tag); // Set search field to location hash when navigating directly to search
 
 	// url = HashViewer.next_url || 'https://api.instagram.com/v1/tags/'+tag+'/media/recent?client_id='+HashViewer.CLIENT_ID;
 	HashViewer.next_url = window.location.pathname + 'gallery.controller.php?hashtag='+encodeURIComponent(tag);
@@ -148,7 +147,7 @@ jQuery(document).ready(function($) {
 	var useAnalytics = useAnalytics || true;
 
 
-	HashViewer.getInputField().keypress(function (e) { // enter-fix for search
+	HashViewer.getInputValue().keypress(function (e) { // enter-fix for search
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
             $("button[id='tag-btn']").click();
             $(this).blur();	
